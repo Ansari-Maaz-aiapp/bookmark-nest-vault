@@ -14,7 +14,259 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          item_id: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          item_id?: string | null
+          user_id?: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          item_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      folders: {
+        Row: {
+          color: string
+          created_at: string
+          description: string | null
+          id: string
+          is_pinned: boolean
+          name: string
+          parent_id: string | null
+          pin_order: number
+          position: number
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_pinned?: boolean
+          name: string
+          parent_id?: string | null
+          pin_order?: number
+          position?: number
+          user_id?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_pinned?: boolean
+          name?: string
+          parent_id?: string | null
+          pin_order?: number
+          position?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "folders_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      item_tags: {
+        Row: {
+          item_id: string
+          tag_id: string
+          user_id: string
+        }
+        Insert: {
+          item_id: string
+          tag_id: string
+          user_id?: string
+        }
+        Update: {
+          item_id?: string
+          tag_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_tags_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "item_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      items: {
+        Row: {
+          author: string | null
+          content: string | null
+          created_at: string
+          deleted_at: string | null
+          description: string | null
+          domain: string | null
+          duplicate_of: string | null
+          favicon_url: string | null
+          folder_id: string | null
+          id: string
+          image_url: string | null
+          in_inbox: boolean
+          is_favorite: boolean
+          is_pinned: boolean
+          kind: string
+          last_viewed_at: string | null
+          normalized_url: string | null
+          pin_order: number
+          published_at: string | null
+          reading_status: string
+          site_name: string | null
+          title: string
+          updated_at: string
+          url: string | null
+          user_id: string
+          view_count: number
+        }
+        Insert: {
+          author?: string | null
+          content?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          domain?: string | null
+          duplicate_of?: string | null
+          favicon_url?: string | null
+          folder_id?: string | null
+          id?: string
+          image_url?: string | null
+          in_inbox?: boolean
+          is_favorite?: boolean
+          is_pinned?: boolean
+          kind?: string
+          last_viewed_at?: string | null
+          normalized_url?: string | null
+          pin_order?: number
+          published_at?: string | null
+          reading_status?: string
+          site_name?: string | null
+          title: string
+          updated_at?: string
+          url?: string | null
+          user_id?: string
+          view_count?: number
+        }
+        Update: {
+          author?: string | null
+          content?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          domain?: string | null
+          duplicate_of?: string | null
+          favicon_url?: string | null
+          folder_id?: string | null
+          id?: string
+          image_url?: string | null
+          in_inbox?: boolean
+          is_favorite?: boolean
+          is_pinned?: boolean
+          kind?: string
+          last_viewed_at?: string | null
+          normalized_url?: string | null
+          pin_order?: number
+          published_at?: string | null
+          reading_status?: string
+          site_name?: string | null
+          title?: string
+          updated_at?: string
+          url?: string | null
+          user_id?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "items_duplicate_of_fkey"
+            columns: ["duplicate_of"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "items_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tags: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          dashboard: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          dashboard?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          dashboard?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
