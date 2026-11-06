@@ -54,11 +54,11 @@
   --color-success: var(--success);
   --color-pin: var(--pin);
   --color-favorite: var(--favorite);
-  --font-display: var(--font-display);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --shadow-card: var(--shadow-card);
-  --shadow-lift: var(--shadow-lift);
+  --font-display: var(--lv-font-display);
+  --font-sans: var(--lv-font-sans);
+  --font-mono: var(--lv-font-mono);
+  --shadow-card: var(--lv-shadow-card);
+  --shadow-lift: var(--lv-shadow-lift);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -71,9 +71,9 @@
 
 :root {
   --radius: 0.75rem;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --lv-font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --lv-font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --lv-font-mono: "Geist Mono", ui-monospace, monospace;
   --background: oklch(0.975 0.008 85);
   --foreground: oklch(0.2 0.02 60);
   --card: oklch(0.993 0.004 85);
@@ -109,8 +109,8 @@
   --sidebar-accent-foreground: oklch(0.2 0.02 60);
   --sidebar-border: oklch(0.9 0.012 80);
   --sidebar-ring: oklch(0.58 0.17 38);
-  --shadow-card: 0 1px 0 oklch(0.2 0.02 60 / 4%), 0 8px 24px -16px oklch(0.2 0.02 60 / 18%);
-  --shadow-lift: 0 2px 0 oklch(0.2 0.02 60 / 4%), 0 18px 40px -20px oklch(0.3 0.05 40 / 30%);
+  --lv-shadow-card: 0 1px 0 oklch(0.2 0.02 60 / 4%), 0 8px 24px -16px oklch(0.2 0.02 60 / 18%);
+  --lv-shadow-lift: 0 2px 0 oklch(0.2 0.02 60 / 4%), 0 18px 40px -20px oklch(0.3 0.05 40 / 30%);
 }
 
 .dark {
@@ -149,8 +149,8 @@
   --sidebar-accent-foreground: oklch(0.95 0.01 80);
   --sidebar-border: oklch(0.25 0.01 60);
   --sidebar-ring: oklch(0.7 0.16 42);
-  --shadow-card: 0 1px 0 oklch(0 0 0 / 30%), 0 8px 24px -16px oklch(0 0 0 / 60%);
-  --shadow-lift: 0 2px 0 oklch(0 0 0 / 30%), 0 18px 40px -18px oklch(0 0 0 / 70%);
+  --lv-shadow-card: 0 1px 0 oklch(0 0 0 / 30%), 0 8px 24px -16px oklch(0 0 0 / 60%);
+  --lv-shadow-lift: 0 2px 0 oklch(0 0 0 / 30%), 0 18px 40px -18px oklch(0 0 0 / 70%);
 }
 
 @layer base {
@@ -163,10 +163,10 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-sans);
+    font-family: var(--lv-font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  h1, h2, h3 { font-family: var(--lv-font-display); letter-spacing: -0.02em; }
   :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -176,5 +176,3 @@
 @utility pb-safe { padding-bottom: env(safe-area-inset-bottom); }
 @utility scrollbar-none { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
 
-@layer base {
-}
