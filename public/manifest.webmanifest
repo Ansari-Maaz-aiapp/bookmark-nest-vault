@@ -1,0 +1,10 @@
+{
+  "name": "LinkVault",
+  "short_name": "LinkVault",
+  "description": "Everything Worth Saving. One Place.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f3ec",
+  "theme_color": "#c2522b",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
