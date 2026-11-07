@@ -15,7 +15,9 @@ import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authentica
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
 import { Route as AuthenticatedPinnedRouteImport } from './routes/_authenticated/pinned'
+import { Route as AuthenticatedReadingRouteImport } from './routes/_authenticated/reading'
 import { Route as AuthenticatedRecentRouteImport } from './routes/_authenticated/recent'
+import { Route as AuthenticatedTagsRouteImport } from './routes/_authenticated/tags'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -47,9 +49,19 @@ const AuthenticatedPinnedRoute = AuthenticatedPinnedRouteImport.update({
   path: '/pinned',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReadingRoute = AuthenticatedReadingRouteImport.update({
+  id: '/reading',
+  path: '/reading',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRecentRoute = AuthenticatedRecentRouteImport.update({
   id: '/recent',
   path: '/recent',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTagsRoute = AuthenticatedTagsRouteImport.update({
+  id: '/tags',
+  path: '/tags',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
@@ -65,7 +77,9 @@ export interface FileRoutesByFullPath {
   '/inbox': typeof AuthenticatedInboxRoute
   '/items': typeof AuthenticatedItemsRoute
   '/pinned': typeof AuthenticatedPinnedRoute
+  '/reading': typeof AuthenticatedReadingRoute
   '/recent': typeof AuthenticatedRecentRoute
+  '/tags': typeof AuthenticatedTagsRoute
   '/trash': typeof AuthenticatedTrashRoute
 }
 export interface FileRoutesByTo {
@@ -75,7 +89,9 @@ export interface FileRoutesByTo {
   '/inbox': typeof AuthenticatedInboxRoute
   '/items': typeof AuthenticatedItemsRoute
   '/pinned': typeof AuthenticatedPinnedRoute
+  '/reading': typeof AuthenticatedReadingRoute
   '/recent': typeof AuthenticatedRecentRoute
+  '/tags': typeof AuthenticatedTagsRoute
   '/trash': typeof AuthenticatedTrashRoute
 }
 export interface FileRoutesById {
@@ -86,7 +102,9 @@ export interface FileRoutesById {
   '/_authenticated/inbox': typeof AuthenticatedInboxRoute
   '/_authenticated/items': typeof AuthenticatedItemsRoute
   '/_authenticated/pinned': typeof AuthenticatedPinnedRoute
+  '/_authenticated/reading': typeof AuthenticatedReadingRoute
   '/_authenticated/recent': typeof AuthenticatedRecentRoute
+  '/_authenticated/tags': typeof AuthenticatedTagsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
 }
 export interface FileRouteTypes {
@@ -98,7 +116,9 @@ export interface FileRouteTypes {
     | '/inbox'
     | '/items'
     | '/pinned'
+    | '/reading'
     | '/recent'
+    | '/tags'
     | '/trash'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -108,7 +128,9 @@ export interface FileRouteTypes {
     | '/inbox'
     | '/items'
     | '/pinned'
+    | '/reading'
     | '/recent'
+    | '/tags'
     | '/trash'
   id:
     | '__root__'
@@ -118,7 +140,9 @@ export interface FileRouteTypes {
     | '/_authenticated/inbox'
     | '/_authenticated/items'
     | '/_authenticated/pinned'
+    | '/_authenticated/reading'
     | '/_authenticated/recent'
+    | '/_authenticated/tags'
     | '/_authenticated/trash'
   fileRoutesById: FileRoutesById
 }
@@ -171,11 +195,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPinnedRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reading': {
+      id: '/_authenticated/reading'
+      path: '/reading'
+      fullPath: '/reading'
+      preLoaderRoute: typeof AuthenticatedReadingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/recent': {
       id: '/_authenticated/recent'
       path: '/recent'
       fullPath: '/recent'
       preLoaderRoute: typeof AuthenticatedRecentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tags': {
+      id: '/_authenticated/tags'
+      path: '/tags'
+      fullPath: '/tags'
+      preLoaderRoute: typeof AuthenticatedTagsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/trash': {
@@ -193,7 +231,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInboxRoute: typeof AuthenticatedInboxRoute
   AuthenticatedItemsRoute: typeof AuthenticatedItemsRoute
   AuthenticatedPinnedRoute: typeof AuthenticatedPinnedRoute
+  AuthenticatedReadingRoute: typeof AuthenticatedReadingRoute
   AuthenticatedRecentRoute: typeof AuthenticatedRecentRoute
+  AuthenticatedTagsRoute: typeof AuthenticatedTagsRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
 }
 
@@ -202,7 +242,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInboxRoute: AuthenticatedInboxRoute,
   AuthenticatedItemsRoute: AuthenticatedItemsRoute,
   AuthenticatedPinnedRoute: AuthenticatedPinnedRoute,
+  AuthenticatedReadingRoute: AuthenticatedReadingRoute,
   AuthenticatedRecentRoute: AuthenticatedRecentRoute,
+  AuthenticatedTagsRoute: AuthenticatedTagsRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
 }
 
