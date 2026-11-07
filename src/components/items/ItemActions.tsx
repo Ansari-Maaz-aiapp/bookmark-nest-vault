@@ -8,7 +8,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { recordView, useFolders, useTrashItem, useUpdateItem, type Item } from "@/lib/vault";
+import { recordView, useFolders, useInvalidateVault, useTrashItem, useUpdateItem, type Item } from "@/lib/vault";
+import { RotateCcw } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useAddItem } from "@/components/items/AddItemProvider";
 
 export function openItem(item: Item) {
@@ -31,12 +33,41 @@ export function useItemToggles() {
   };
 }
 
+function TrashActions({ item }: { item: Item }) {
+  const { update } = useItemToggles();
+  const invalidate = useInvalidateVault();
+  return (
+    <span className="flex shrink-0 gap-1" onClick={(e) => e.stopPropagation()}>
+      <Button size="sm" variant="outline" onClick={() => update.mutate({ id: item.id, patch: { deleted_at: null }, action: "restored" })}>
+        <RotateCcw /> Restore
+      </Button>
+      <Button
+        size="icon"
+        variant="ghost"
+        className="size-8 text-destructive"
+        aria-label="Delete forever"
+        onClick={async () => {
+          if (!window.confirm(`Delete “${item.title}” forever? This can't be undone.`)) return;
+          const { error } = await supabase.from("items").delete().eq("id", item.id);
+          if (error) toast.error(error.message);
+          else toast.success("Deleted forever");
+          invalidate();
+        }}
+      >
+        <Trash2 />
+      </Button>
+    </span>
+  );
+}
+
 export function ItemActions({ item, trigger }: { item: Item; trigger?: React.ReactNode }) {
   const navigate = useNavigate();
   const { toggleFavorite, togglePin, update } = useItemToggles();
   const trash = useTrashItem();
   const { data: folders } = useFolders();
   const { openEdit } = useAddItem();
+
+  if (item.deleted_at) return <TrashActions item={item} />;
 
   async function share() {
     const data = { title: item.title, url: item.url ?? undefined, text: item.description ?? undefined };
