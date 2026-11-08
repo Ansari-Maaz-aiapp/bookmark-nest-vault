@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
@@ -32,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
   id: '/favorites',
@@ -96,7 +102,7 @@ const AuthenticatedItemIdRoute = AuthenticatedItemIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRouteRouteWithChildren
+  '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/inbox': typeof AuthenticatedInboxRoute
@@ -112,7 +118,6 @@ export interface FileRoutesByFullPath {
   '/folders/': typeof AuthenticatedFoldersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/inbox': typeof AuthenticatedInboxRoute
@@ -123,6 +128,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/tags': typeof AuthenticatedTagsRoute
   '/trash': typeof AuthenticatedTrashRoute
+  '/': typeof AuthenticatedIndexRoute
   '/folders/$id': typeof AuthenticatedFoldersIdRoute
   '/item/$id': typeof AuthenticatedItemIdRoute
   '/folders': typeof AuthenticatedFoldersIndexRoute
@@ -140,6 +146,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tags': typeof AuthenticatedTagsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/folders/$id': typeof AuthenticatedFoldersIdRoute
   '/_authenticated/item/$id': typeof AuthenticatedItemIdRoute
   '/_authenticated/folders/': typeof AuthenticatedFoldersIndexRoute
@@ -163,7 +170,6 @@ export interface FileRouteTypes {
     | '/folders/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/auth'
     | '/favorites'
     | '/inbox'
@@ -174,6 +180,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tags'
     | '/trash'
+    | '/'
     | '/folders/$id'
     | '/item/$id'
     | '/folders'
@@ -190,6 +197,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/tags'
     | '/_authenticated/trash'
+    | '/_authenticated/'
     | '/_authenticated/folders/$id'
     | '/_authenticated/item/$id'
     | '/_authenticated/folders/'
@@ -215,6 +223,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/favorites': {
       id: '/_authenticated/favorites'
@@ -313,6 +328,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTagsRoute: typeof AuthenticatedTagsRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedFoldersIdRoute: typeof AuthenticatedFoldersIdRoute
   AuthenticatedItemIdRoute: typeof AuthenticatedItemIdRoute
   AuthenticatedFoldersIndexRoute: typeof AuthenticatedFoldersIndexRoute
@@ -328,6 +344,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTagsRoute: AuthenticatedTagsRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedFoldersIdRoute: AuthenticatedFoldersIdRoute,
   AuthenticatedItemIdRoute: AuthenticatedItemIdRoute,
   AuthenticatedFoldersIndexRoute: AuthenticatedFoldersIndexRoute,
