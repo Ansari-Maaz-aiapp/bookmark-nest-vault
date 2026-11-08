@@ -11,14 +11,19 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
 import { Route as AuthenticatedPinnedRouteImport } from './routes/_authenticated/pinned'
 import { Route as AuthenticatedReadingRouteImport } from './routes/_authenticated/reading'
 import { Route as AuthenticatedRecentRouteImport } from './routes/_authenticated/recent'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTagsRouteImport } from './routes/_authenticated/tags'
 import { Route as AuthenticatedTrashRouteImport } from './routes/_authenticated/trash'
+import { Route as AuthenticatedFoldersIndexRouteImport } from './routes/_authenticated/folders.index'
+import { Route as AuthenticatedFoldersIdRouteImport } from './routes/_authenticated/folders.$id'
+import { Route as AuthenticatedItemIdRouteImport } from './routes/_authenticated/item.$id'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -28,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
   id: '/favorites',
@@ -59,6 +69,11 @@ const AuthenticatedRecentRoute = AuthenticatedRecentRouteImport.update({
   path: '/recent',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTagsRoute = AuthenticatedTagsRouteImport.update({
   id: '/tags',
   path: '/tags',
@@ -69,9 +84,25 @@ const AuthenticatedTrashRoute = AuthenticatedTrashRouteImport.update({
   path: '/trash',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFoldersIndexRoute =
+  AuthenticatedFoldersIndexRouteImport.update({
+    id: '/folders/',
+    path: '/folders/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedFoldersIdRoute = AuthenticatedFoldersIdRouteImport.update({
+  id: '/folders/$id',
+  path: '/folders/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedItemIdRoute = AuthenticatedItemIdRouteImport.update({
+  id: '/item/$id',
+  path: '/item/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRouteRouteWithChildren
+  '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/inbox': typeof AuthenticatedInboxRoute
@@ -79,11 +110,14 @@ export interface FileRoutesByFullPath {
   '/pinned': typeof AuthenticatedPinnedRoute
   '/reading': typeof AuthenticatedReadingRoute
   '/recent': typeof AuthenticatedRecentRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/tags': typeof AuthenticatedTagsRoute
   '/trash': typeof AuthenticatedTrashRoute
+  '/folders/$id': typeof AuthenticatedFoldersIdRoute
+  '/item/$id': typeof AuthenticatedItemIdRoute
+  '/folders/': typeof AuthenticatedFoldersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/inbox': typeof AuthenticatedInboxRoute
@@ -91,8 +125,13 @@ export interface FileRoutesByTo {
   '/pinned': typeof AuthenticatedPinnedRoute
   '/reading': typeof AuthenticatedReadingRoute
   '/recent': typeof AuthenticatedRecentRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/tags': typeof AuthenticatedTagsRoute
   '/trash': typeof AuthenticatedTrashRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/folders/$id': typeof AuthenticatedFoldersIdRoute
+  '/item/$id': typeof AuthenticatedItemIdRoute
+  '/folders': typeof AuthenticatedFoldersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,8 +143,13 @@ export interface FileRoutesById {
   '/_authenticated/pinned': typeof AuthenticatedPinnedRoute
   '/_authenticated/reading': typeof AuthenticatedReadingRoute
   '/_authenticated/recent': typeof AuthenticatedRecentRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tags': typeof AuthenticatedTagsRoute
   '/_authenticated/trash': typeof AuthenticatedTrashRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/folders/$id': typeof AuthenticatedFoldersIdRoute
+  '/_authenticated/item/$id': typeof AuthenticatedItemIdRoute
+  '/_authenticated/folders/': typeof AuthenticatedFoldersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -118,11 +162,14 @@ export interface FileRouteTypes {
     | '/pinned'
     | '/reading'
     | '/recent'
+    | '/settings'
     | '/tags'
     | '/trash'
+    | '/folders/$id'
+    | '/item/$id'
+    | '/folders/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/auth'
     | '/favorites'
     | '/inbox'
@@ -130,8 +177,13 @@ export interface FileRouteTypes {
     | '/pinned'
     | '/reading'
     | '/recent'
+    | '/settings'
     | '/tags'
     | '/trash'
+    | '/'
+    | '/folders/$id'
+    | '/item/$id'
+    | '/folders'
   id:
     | '__root__'
     | '/_authenticated'
@@ -142,8 +194,13 @@ export interface FileRouteTypes {
     | '/_authenticated/pinned'
     | '/_authenticated/reading'
     | '/_authenticated/recent'
+    | '/_authenticated/settings'
     | '/_authenticated/tags'
     | '/_authenticated/trash'
+    | '/_authenticated/'
+    | '/_authenticated/folders/$id'
+    | '/_authenticated/item/$id'
+    | '/_authenticated/folders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -166,6 +223,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/favorites': {
       id: '/_authenticated/favorites'
@@ -209,6 +273,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecentRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tags': {
       id: '/_authenticated/tags'
       path: '/tags'
@@ -223,6 +294,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTrashRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/folders/': {
+      id: '/_authenticated/folders/'
+      path: '/folders'
+      fullPath: '/folders/'
+      preLoaderRoute: typeof AuthenticatedFoldersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/folders/$id': {
+      id: '/_authenticated/folders/$id'
+      path: '/folders/$id'
+      fullPath: '/folders/$id'
+      preLoaderRoute: typeof AuthenticatedFoldersIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/item/$id': {
+      id: '/_authenticated/item/$id'
+      path: '/item/$id'
+      fullPath: '/item/$id'
+      preLoaderRoute: typeof AuthenticatedItemIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -233,8 +325,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPinnedRoute: typeof AuthenticatedPinnedRoute
   AuthenticatedReadingRoute: typeof AuthenticatedReadingRoute
   AuthenticatedRecentRoute: typeof AuthenticatedRecentRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTagsRoute: typeof AuthenticatedTagsRoute
   AuthenticatedTrashRoute: typeof AuthenticatedTrashRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedFoldersIdRoute: typeof AuthenticatedFoldersIdRoute
+  AuthenticatedItemIdRoute: typeof AuthenticatedItemIdRoute
+  AuthenticatedFoldersIndexRoute: typeof AuthenticatedFoldersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -244,8 +341,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPinnedRoute: AuthenticatedPinnedRoute,
   AuthenticatedReadingRoute: AuthenticatedReadingRoute,
   AuthenticatedRecentRoute: AuthenticatedRecentRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTagsRoute: AuthenticatedTagsRoute,
   AuthenticatedTrashRoute: AuthenticatedTrashRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedFoldersIdRoute: AuthenticatedFoldersIdRoute,
+  AuthenticatedItemIdRoute: AuthenticatedItemIdRoute,
+  AuthenticatedFoldersIndexRoute: AuthenticatedFoldersIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
