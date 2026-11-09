@@ -147,6 +147,22 @@ export function ThemeMenuItems() {
   );
 }
 
+export function ThemeToggle({ className }: { className?: string }) {
+  const { setMode } = useTheme();
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={className}
+      aria-label="Toggle light or dark theme"
+      onClick={() => setMode(document.documentElement.classList.contains("dark") ? "light" : "dark")}
+    >
+      <Sun className="hidden dark:block" />
+      <Moon className="dark:hidden" />
+    </Button>
+  );
+}
+
 function AccountMenu({ collapsed }: { collapsed?: boolean }) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -271,6 +287,7 @@ function ShellInner({ children }: { children: ReactNode }) {
           <Link to="/" className="flex-1" aria-label="LinkVault home">
             <Logo />
           </Link>
+          <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={() => setPalette(true)} aria-label="Search">
             <Search />
           </Button>
@@ -287,7 +304,7 @@ function ShellInner({ children }: { children: ReactNode }) {
       >
         <Plus className="size-6" />
       </button>
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t bg-background/95 pb-safe backdrop-blur md:hidden" aria-label="Bottom">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-3 border-t bg-background/95 pb-safe backdrop-blur md:hidden" aria-label="Bottom">
         {bottom.map((b) => {
           const active = isActive(path, b);
           return (
@@ -297,12 +314,6 @@ function ShellInner({ children }: { children: ReactNode }) {
             </Link>
           );
         })}
-        <button onClick={() => setPalette(true)} className="flex h-16 flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground">
-          <Search className="size-5" /> Search
-        </button>
-        <button onClick={() => setDrawer(true)} className="flex h-16 flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground">
-          <MoreHorizontal className="size-5" /> More
-        </button>
       </nav>
 
       <Sheet open={drawer} onOpenChange={setDrawer}>
