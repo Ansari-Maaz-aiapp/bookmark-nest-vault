@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## LinkVault architecture
+- Signed-in pages live under `src/routes/_authenticated/` (client-only gate, wraps `AppShell`); `/auth` is the only public page — the session lives in browser storage.
+- Vault data is read/written from the browser client with row-level security (`src/lib/vault.ts`); only page-metadata fetching runs server-side (`src/lib/metadata.functions.ts`) so it can bypass CORS behind SSRF checks (`src/lib/ssrf.ts`).
+- Duplicate links are detected by `normalizeUrl` (`src/lib/url.ts`) plus a partial unique index on `items(user_id, normalized_url)`; intentional copies set `duplicate_of`.
+- Strict TS flags (exactOptionalPropertyTypes, noUncheckedIndexedAccess, noPropertyAccessFromIndexSignature, noImplicitReturns) are off to keep UI code readable.
