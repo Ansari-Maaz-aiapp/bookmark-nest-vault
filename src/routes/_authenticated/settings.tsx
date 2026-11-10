@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, Monitor, Moon, Settings, Sun, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/shell/AppShell";
-import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useInvalidateVault } from "@/lib/vault";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { ProfileSection } from "@/components/settings/ProfileSection";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -39,7 +39,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function Page() {
-  const { user } = useAuth();
   const { mode, setMode } = useTheme();
   const invalidate = useInvalidateVault();
 
@@ -68,8 +67,7 @@ function Page() {
       <PageHeader title="Settings" icon={Settings} />
       <div className="max-w-2xl space-y-5">
         <Section title="Profile">
-          <p className="text-sm text-muted-foreground">Signed in as</p>
-          <p className="font-medium">{user?.email}</p>
+          <ProfileSection />
         </Section>
         <Section title="Appearance">
           <div className="grid grid-cols-3 gap-2">
