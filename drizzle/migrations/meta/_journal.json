@@ -15,6 +15,13 @@
       "when": 1794294849181,
       "tag": "0001_create_profiles",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794294871488,
+      "tag": "0002_avatar_storage_policies",
+      "breakpoints": true
     }
   ]
 }
