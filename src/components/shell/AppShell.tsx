@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
 import { statsQuery, useFolders } from "@/lib/vault";
+import { useProfile } from "@/lib/profile";
 import { AddItemProvider, useAddItem } from "@/components/items/AddItemProvider";
 import { CommandPalette } from "./CommandPalette";
 import { supabase } from "@/integrations/supabase/client";
@@ -167,13 +168,23 @@ function AccountMenu({ collapsed }: { collapsed?: boolean }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const initial = (user?.email ?? "?")[0].toUpperCase();
+  const { data: profile } = useProfile(user);
+  const initial = (profile?.name ?? user?.email ?? "?")[0].toUpperCase();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className={cn("flex w-full items-center gap-2.5 rounded-lg p-2 text-left hover:bg-sidebar-accent", collapsed && "justify-center")} aria-label="Account and theme">
-          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/15 font-medium text-primary">{initial}</span>
-          {!collapsed && <span className="min-w-0 flex-1 truncate text-sm">{user?.email}</span>}
+          {profile?.avatarSrc ? (
+            <img src={profile.avatarSrc} alt="" className="size-8 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
+          ) : (
+            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/15 font-medium text-primary">{initial}</span>
+          )}
+          {!collapsed && (
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium">{profile?.name ?? user?.email}</span>
+              {profile && <span className="block truncate text-xs text-muted-foreground">{user?.email}</span>}
+            </span>
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" side="top" className="w-56">
