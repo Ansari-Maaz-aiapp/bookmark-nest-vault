@@ -34,3 +34,4 @@ use the editor.
 - Vault data is read/written from the browser client with row-level security (`src/lib/vault.ts`); only page-metadata fetching runs server-side (`src/lib/metadata.functions.ts`) so it can bypass CORS behind SSRF checks (`src/lib/ssrf.ts`).
 - Duplicate links are detected by `normalizeUrl` (`src/lib/url.ts`) plus a partial unique index on `items(user_id, normalized_url)`; intentional copies set `duplicate_of`.
 - Strict TS flags (exactOptionalPropertyTypes, noUncheckedIndexedAccess, noPropertyAccessFromIndexSignature, noImplicitReturns) are off to keep UI code readable.
+- Signed-out visitors land on the public `/welcome` marketing page (redirect from `_authenticated`); `/auth` stays the sign-in page. Why: a landing page sells the app before sign-in.
