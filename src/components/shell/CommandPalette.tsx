@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { BookOpen, Folder, FolderPlus, Hash, Home, Inbox, Layers, Link2, Monitor, Moon, NotebookPen, Pin, Settings, Star, Sun, Trash2 } from "lucide-react";
+import { Folder, FolderPlus, Hash, Home, Layers, Link2, Monitor, Moon, NotebookPen, Pin, Settings, Star, Sun, Trash2, UserRound } from "lucide-react";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
 import { itemsQuery, useFolders } from "@/lib/vault";
 import { useAddItem } from "@/components/items/AddItemProvider";
@@ -77,12 +77,11 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
         <CommandGroup heading="Go to">
           <CommandItem onSelect={() => go("/")}><Home /> Dashboard</CommandItem>
           <CommandItem onSelect={() => go("/items")}><Layers /> All Items</CommandItem>
-          <CommandItem onSelect={() => go("/inbox")}><Inbox /> Inbox</CommandItem>
           <CommandItem onSelect={() => go("/favorites")}><Star /> Favorites</CommandItem>
           <CommandItem onSelect={() => go("/pinned")}><Pin /> Pinned</CommandItem>
-          <CommandItem onSelect={() => go("/reading")}><BookOpen /> Reading Queue</CommandItem>
           <CommandItem onSelect={() => go("/tags")}><Hash /> Tags</CommandItem>
           <CommandItem onSelect={() => go("/trash")}><Trash2 /> Trash</CommandItem>
+          <CommandItem onSelect={() => go("/profile")}><UserRound /> Profile</CommandItem>
           <CommandItem onSelect={() => go("/settings")}><Settings /> Settings</CommandItem>
         </CommandGroup>
         {folders && folders.length > 0 && (
