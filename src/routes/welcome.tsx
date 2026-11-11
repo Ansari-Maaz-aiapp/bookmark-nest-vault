@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import {
-  ArrowRight, BookOpen, Copy, Folder, Hash, Keyboard, Lock, Pin, Search, Sparkles, Star, Zap, Smartphone, LayoutDashboard,
+  ArrowRight, Bookmark, Copy, GripVertical, Folder, Hash, Keyboard, Lock, Pin, Search, Sparkles, Star, Zap, Smartphone, LayoutDashboard,
 } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/welcome")({
   head: () => ({
     meta: [
       { title: "LinkVault — Everything Worth Saving. One Place." },
-      { name: "description", content: "Save links, notes and resources in a private, beautifully organized vault with folders, tags, search and a reading queue." },
+      { name: "description", content: "Save links, notes and resources in a private, beautifully organized vault with folders, tags, search and your own custom order." },
       { property: "og:title", content: "LinkVault — Everything Worth Saving" },
       { property: "og:description", content: "A private, beautifully organized vault for every link worth keeping." },
       { property: "og:type", content: "website" },
@@ -30,7 +30,7 @@ const features = [
   { icon: Zap, title: "Instant previews", text: "Paste a link — title, icon, description and image fill in on their own." },
   { icon: Copy, title: "Duplicate radar", text: "Spots the same link even with www. or tracking junk added." },
   { icon: Folder, title: "Folders & tags", text: "Nested folders, pinned favorites and tags that stay tidy." },
-  { icon: BookOpen, title: "Reading queue", text: "Mark what to read next and track what you've finished." },
+  { icon: GripVertical, title: "Your own order", text: "Drag links into exactly the order you want — it stays that way." },
   { icon: Search, title: "Search everything", text: "Press Ctrl/⌘K and jump to anything in milliseconds." },
   { icon: Lock, title: "Private by default", text: "Your vault is yours alone. Nobody else can see it." },
 ];
@@ -45,7 +45,7 @@ const showcase = [
 const floating = [
   { icon: Star, label: "Design systems", x: "-8%", y: "12%", d: 0 },
   { icon: Hash, label: "#research", x: "78%", y: "4%", d: 0.6 },
-  { icon: BookOpen, label: "Reading · 12", x: "84%", y: "70%", d: 1.2 },
+  { icon: Bookmark, label: "Saved · 128", x: "84%", y: "70%", d: 1.2 },
   { icon: Folder, label: "Side projects", x: "-4%", y: "78%", d: 1.8 },
 ];
 

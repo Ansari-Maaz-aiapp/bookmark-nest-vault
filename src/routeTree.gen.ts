@@ -14,10 +14,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
-import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
 import { Route as AuthenticatedPinnedRouteImport } from './routes/_authenticated/pinned'
-import { Route as AuthenticatedReadingRouteImport } from './routes/_authenticated/reading'
 import { Route as AuthenticatedRecentRouteImport } from './routes/_authenticated/recent'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTagsRouteImport } from './routes/_authenticated/tags'
@@ -50,11 +48,6 @@ const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
   path: '/favorites',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedInboxRoute = AuthenticatedInboxRouteImport.update({
-  id: '/inbox',
-  path: '/inbox',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedItemsRoute = AuthenticatedItemsRouteImport.update({
   id: '/items',
   path: '/items',
@@ -63,11 +56,6 @@ const AuthenticatedItemsRoute = AuthenticatedItemsRouteImport.update({
 const AuthenticatedPinnedRoute = AuthenticatedPinnedRouteImport.update({
   id: '/pinned',
   path: '/pinned',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedReadingRoute = AuthenticatedReadingRouteImport.update({
-  id: '/reading',
-  path: '/reading',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRecentRoute = AuthenticatedRecentRouteImport.update({
@@ -112,10 +100,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/welcome': typeof WelcomeRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
-  '/inbox': typeof AuthenticatedInboxRoute
   '/items': typeof AuthenticatedItemsRoute
   '/pinned': typeof AuthenticatedPinnedRoute
-  '/reading': typeof AuthenticatedReadingRoute
   '/recent': typeof AuthenticatedRecentRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tags': typeof AuthenticatedTagsRoute
@@ -128,10 +114,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/welcome': typeof WelcomeRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
-  '/inbox': typeof AuthenticatedInboxRoute
   '/items': typeof AuthenticatedItemsRoute
   '/pinned': typeof AuthenticatedPinnedRoute
-  '/reading': typeof AuthenticatedReadingRoute
   '/recent': typeof AuthenticatedRecentRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tags': typeof AuthenticatedTagsRoute
@@ -147,10 +131,8 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/welcome': typeof WelcomeRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
-  '/_authenticated/inbox': typeof AuthenticatedInboxRoute
   '/_authenticated/items': typeof AuthenticatedItemsRoute
   '/_authenticated/pinned': typeof AuthenticatedPinnedRoute
-  '/_authenticated/reading': typeof AuthenticatedReadingRoute
   '/_authenticated/recent': typeof AuthenticatedRecentRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tags': typeof AuthenticatedTagsRoute
@@ -167,10 +149,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/welcome'
     | '/favorites'
-    | '/inbox'
     | '/items'
     | '/pinned'
-    | '/reading'
     | '/recent'
     | '/settings'
     | '/tags'
@@ -183,10 +163,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/welcome'
     | '/favorites'
-    | '/inbox'
     | '/items'
     | '/pinned'
-    | '/reading'
     | '/recent'
     | '/settings'
     | '/tags'
@@ -201,10 +179,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/welcome'
     | '/_authenticated/favorites'
-    | '/_authenticated/inbox'
     | '/_authenticated/items'
     | '/_authenticated/pinned'
-    | '/_authenticated/reading'
     | '/_authenticated/recent'
     | '/_authenticated/settings'
     | '/_authenticated/tags'
@@ -258,13 +234,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFavoritesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/inbox': {
-      id: '/_authenticated/inbox'
-      path: '/inbox'
-      fullPath: '/inbox'
-      preLoaderRoute: typeof AuthenticatedInboxRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/items': {
       id: '/_authenticated/items'
       path: '/items'
@@ -277,13 +246,6 @@ declare module '@tanstack/react-router' {
       path: '/pinned'
       fullPath: '/pinned'
       preLoaderRoute: typeof AuthenticatedPinnedRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/reading': {
-      id: '/_authenticated/reading'
-      path: '/reading'
-      fullPath: '/reading'
-      preLoaderRoute: typeof AuthenticatedReadingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/recent': {
@@ -340,10 +302,8 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
-  AuthenticatedInboxRoute: typeof AuthenticatedInboxRoute
   AuthenticatedItemsRoute: typeof AuthenticatedItemsRoute
   AuthenticatedPinnedRoute: typeof AuthenticatedPinnedRoute
-  AuthenticatedReadingRoute: typeof AuthenticatedReadingRoute
   AuthenticatedRecentRoute: typeof AuthenticatedRecentRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTagsRoute: typeof AuthenticatedTagsRoute
@@ -356,10 +316,8 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
-  AuthenticatedInboxRoute: AuthenticatedInboxRoute,
   AuthenticatedItemsRoute: AuthenticatedItemsRoute,
   AuthenticatedPinnedRoute: AuthenticatedPinnedRoute,
-  AuthenticatedReadingRoute: AuthenticatedReadingRoute,
   AuthenticatedRecentRoute: AuthenticatedRecentRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTagsRoute: AuthenticatedTagsRoute,

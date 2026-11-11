@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import {
-  Activity, ArrowDown, ArrowUp, BookOpen, ChevronDown, Eye, EyeOff, Folder, GripVertical, Hash, Inbox, Layers, Link2, Maximize2, Minimize2,
+  Activity, ArrowDown, ArrowUp, ChevronDown, Eye, EyeOff, Folder, GripVertical, Hash, Layers, Link2, Maximize2, Minimize2,
   NotebookPen, Pin, Plus, RotateCcw, SlidersHorizontal, Sparkles, Star, Clock,
 } from "lucide-react";
 import { activityQuery, itemsQuery, KIND_LABEL, statsQuery, useFolders, useTags } from "@/lib/vault";
@@ -28,14 +28,14 @@ export const Route = createFileRoute("/_authenticated/")({
   component: Dashboard,
 });
 
-type WidgetId = "overview" | "pinned" | "pinnedFolders" | "favorites" | "recent" | "reading" | "weekly" | "kinds" | "folders" | "tags" | "activity" | "domains";
+type WidgetId = "overview" | "pinned" | "pinnedFolders" | "favorites" | "recent" | "weekly" | "kinds" | "folders" | "tags" | "activity" | "domains";
 type W = { id: WidgetId; hidden?: boolean; collapsed?: boolean; wide?: boolean };
 const TITLES: Record<WidgetId, string> = {
   overview: "Overview", pinned: "Pinned items", pinnedFolders: "Pinned folders", favorites: "Favorites", recent: "Recently added",
-  reading: "Continue reading", weekly: "Saving activity", kinds: "Content types", folders: "Folders", tags: "Popular tags", activity: "Recent activity", domains: "Top sites",
+  weekly: "Saving activity", kinds: "Content types", folders: "Folders", tags: "Popular tags", activity: "Recent activity", domains: "Top sites",
 };
 const DEFAULT: W[] = [
-  { id: "overview", wide: true }, { id: "pinned" }, { id: "reading" }, { id: "recent" }, { id: "favorites" },
+  { id: "overview", wide: true }, { id: "pinned" }, { id: "recent" }, { id: "favorites" },
   { id: "weekly" }, { id: "kinds" }, { id: "pinnedFolders" }, { id: "folders" }, { id: "tags" }, { id: "domains" }, { id: "activity" },
 ];
 
@@ -169,8 +169,7 @@ function Widget({ id }: { id: WidgetId }) {
     case "overview": return <Overview />;
     case "pinned": return <ItemList filter={{ pinned: true }} empty="Pin items for quick access." more="/pinned" />;
     case "favorites": return <ItemList filter={{ fav: true }} empty="Star items you love." more="/favorites" />;
-    case "recent": return <ItemList filter={{}} empty="Nothing saved yet." more="/items" />;
-    case "reading": return <ItemList filter={{ status: "reading" }} fallback={{ status: "unread" }} empty="Your reading queue is empty." more="/reading" />;
+    case "recent": return <ItemList filter={{ sort: "new" }} empty="Nothing saved yet." more="/items" />;
     case "weekly": return <Weekly />;
     case "kinds": return <Kinds />;
     case "pinnedFolders": return <FolderList pinnedOnly />;
@@ -193,12 +192,10 @@ function Overview() {
     { label: "Folders", value: folders?.length ?? 0, icon: Folder, to: "/folders" as const, search: {} },
     { label: "Favorites", value: d.filter((i) => i.is_favorite).length, icon: Star, to: "/favorites" as const, search: {} },
     { label: "Pinned", value: d.filter((i) => i.is_pinned).length, icon: Pin, to: "/pinned" as const, search: {} },
-    { label: "In Inbox", value: d.filter((i) => i.in_inbox).length, icon: Inbox, to: "/inbox" as const, search: {} },
-    { label: "Unread", value: d.filter((i) => i.reading_status === "unread").length, icon: BookOpen, to: "/reading" as const, search: { status: "unread" } },
     { label: "This week", value: d.filter((i) => Date.parse(i.created_at) > weekAgo).length, icon: Clock, to: "/items" as const, search: { range: "7d" } },
   ];
   return (
-    <div className="grid grid-cols-2 gap-2 min-[480px]:grid-cols-3 md:grid-cols-5 xl:grid-cols-9">
+    <div className="grid grid-cols-2 gap-2 min-[480px]:grid-cols-3 md:grid-cols-5 xl:grid-cols-7">
       {tiles.map((t) => (
         <Link key={t.label} to={t.to} search={t.search as never} className="group rounded-xl border bg-background p-3 transition hover:border-primary/60 hover:bg-accent">
           <t.icon className="size-4 text-muted-foreground group-hover:text-primary" />
@@ -350,7 +347,7 @@ function Domains() {
 function ActivityFeed() {
   const { data } = useQuery(activityQuery);
   if (!data?.length) return <p className="py-6 text-center text-sm text-muted-foreground"><Activity className="mx-auto mb-2 size-5" />Your activity will show here.</p>;
-  const label = (a: string) => ({ added: "Saved", edited: "Edited", trashed: "Moved to Trash", restored: "Restored", favorited: "Favorited", unfavorited: "Unfavorited", pinned: "Pinned", unpinned: "Unpinned", moved: "Moved", processed: "Organized" } as Record<string, string>)[a] ?? (a.startsWith("reading:") ? `Reading: ${a.split(":")[1]}` : a);
+  const label = (a: string) => ({ added: "Saved", edited: "Edited", trashed: "Moved to Trash", restored: "Restored", favorited: "Favorited", unfavorited: "Unfavorited", pinned: "Pinned", unpinned: "Unpinned", moved: "Moved", processed: "Organized" } as Record<string, string>)[a] ?? a;
   return (
     <ol className="space-y-0.5">
       {data.slice(0, 8).map((a) => {

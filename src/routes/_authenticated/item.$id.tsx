@@ -77,8 +77,7 @@ function Page() {
           )}
           <dl className="grid grid-cols-2 gap-3 border-t pt-4 text-sm sm:grid-cols-4">
             <div><dt className="text-xs text-muted-foreground">Saved</dt><dd>{new Date(item.created_at).toLocaleDateString()}</dd></div>
-            <div><dt className="text-xs text-muted-foreground">Folder</dt><dd>{folder ? <Link to="/folders/$id" params={{ id: folder.id }} className="hover:text-primary">{folder.name}</Link> : "Inbox"}</dd></div>
-            <div><dt className="text-xs text-muted-foreground">Reading</dt><dd className="capitalize">{item.reading_status === "none" ? "—" : item.reading_status}</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Folder</dt><dd>{folder ? <Link to="/folders/$id" params={{ id: folder.id }} className="hover:text-primary">{folder.name}</Link> : "No folder"}</dd></div>
             <div><dt className="text-xs text-muted-foreground">Opened</dt><dd>{item.view_count}×</dd></div>
             {item.author && <div><dt className="text-xs text-muted-foreground">Author</dt><dd>{item.author}</dd></div>}
             {item.published_at && <div><dt className="text-xs text-muted-foreground">Published</dt><dd>{new Date(item.published_at).toLocaleDateString()}</dd></div>}
