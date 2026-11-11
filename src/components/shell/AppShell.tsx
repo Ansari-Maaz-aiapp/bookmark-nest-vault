@@ -2,8 +2,8 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
 import {
-  BookOpen, ChevronsLeft, ChevronsRight, Clock, Eye, Folder, Hash, Home, Inbox, Layers, LogOut, Menu, Monitor, Moon, MoreHorizontal,
-  Pin, Plus, Search, Settings, Star, Sun, Trash2,
+  ChevronsLeft, ChevronsRight, Clock, Eye, Folder, Hash, Home, Layers, LogOut, Menu, Monitor, Moon,
+  Pin, Plus, Search, Settings, Star, Sun, Trash2, UserRound,
 } from "lucide-react";
 import { Logo, LogoMark } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
@@ -26,10 +26,8 @@ function useCounts() {
   const items = data ?? [];
   return {
     all: items.length,
-    inbox: items.filter((i) => i.in_inbox).length,
     fav: items.filter((i) => i.is_favorite).length,
     pinned: items.filter((i) => i.is_pinned).length,
-    reading: items.filter((i) => i.reading_status === "unread" || i.reading_status === "reading").length,
   };
 }
 
@@ -41,10 +39,8 @@ function useSections(): { title: string; items: NavItem[] }[] {
       items: [
         { to: "/", label: "Dashboard", icon: Home, exact: true },
         { to: "/items", label: "All Items", icon: Layers, count: c.all, exact: true },
-        { to: "/inbox", label: "Inbox", icon: Inbox, count: c.inbox },
         { to: "/favorites", label: "Favorites", icon: Star, count: c.fav },
         { to: "/pinned", label: "Pinned", icon: Pin, count: c.pinned },
-        { to: "/reading", label: "Reading Queue", icon: BookOpen, count: c.reading },
         { to: "/recent", label: "Recently Viewed", icon: Eye },
       ],
     },
@@ -58,6 +54,7 @@ function useSections(): { title: string; items: NavItem[] }[] {
     {
       title: "Other",
       items: [
+        { to: "/profile", label: "Profile", icon: UserRound },
         { to: "/trash", label: "Trash", icon: Trash2 },
         { to: "/settings", label: "Settings", icon: Settings },
       ],
@@ -190,6 +187,9 @@ function AccountMenu({ collapsed }: { collapsed?: boolean }) {
       <DropdownMenuContent align="start" side="top" className="w-56">
         <ThemeMenuItems />
         <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => navigate({ to: "/profile" })}>
+          <UserRound /> Profile
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={() => navigate({ to: "/settings" })}>
           <Settings /> Settings
         </DropdownMenuItem>
@@ -236,6 +236,7 @@ function ShellInner({ children }: { children: ReactNode }) {
     { to: "/", label: "Home", icon: Home, exact: true },
     { to: "/items", label: "All", icon: Layers, exact: true },
     { to: "/favorites", label: "Favorites", icon: Star },
+    { to: "/profile", label: "Profile", icon: UserRound },
   ];
 
   return (
@@ -315,7 +316,7 @@ function ShellInner({ children }: { children: ReactNode }) {
       >
         <Plus className="size-6" />
       </button>
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-3 border-t bg-background/95 pb-safe backdrop-blur md:hidden" aria-label="Bottom">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t bg-background/95 pb-safe backdrop-blur md:hidden" aria-label="Bottom">
         {bottom.map((b) => {
           const active = isActive(path, b);
           return (

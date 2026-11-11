@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { LayoutGrid, List, Rows3, Search, X, Plus, Loader2 } from "lucide-react";
-import { itemsQuery, KIND_LABEL, useFolders, useTags, type ItemFilter } from "@/lib/vault";
-import { ItemGrid, EmptyState, type ViewMode } from "./ItemCard";
+import { effectiveSort, itemsQuery, KIND_LABEL, useFolders, useTags, type ItemFilter } from "@/lib/vault";
+import { EmptyState, type ViewMode } from "./ItemCard";
+import { SortableItemGrid } from "./SortableItemGrid";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -28,7 +29,7 @@ export function ItemsView({
   filter: ItemFilter;
   onChange: (f: ItemFilter) => void;
   empty: { icon: React.ReactNode; title: string; body: string };
-  hideFilters?: ("kind" | "folder" | "tag" | "status" | "range")[];
+  hideFilters?: ("kind" | "folder" | "tag" | "range")[];
 }) {
   const [view, setView] = useViewMode();
   const [q, setQ] = useState(filter.q ?? "");
@@ -37,6 +38,7 @@ export function ItemsView({
   const { openAdd } = useAddItem();
   const merged = { ...filter, ...fixed };
   const { data, isLoading, error } = useQuery(itemsQuery(merged));
+  const sortable = effectiveSort(merged) === "custom" && !merged.trash;
 
   useEffect(() => {
     const t = setTimeout(() => { if ((filter.q ?? "") !== q) onChange({ ...filter, q: q || undefined }); }, 300);
@@ -45,7 +47,7 @@ export function ItemsView({
   }, [q]);
 
   const set = (k: keyof ItemFilter, v: string) => onChange({ ...filter, [k]: v === ALL ? undefined : v });
-  const active = (["kind", "folder", "tag", "status", "range", "q", "domain"] as const).filter((k) => filter[k]);
+  const active = (["kind", "folder", "tag", "range", "q", "domain"] as const).filter((k) => filter[k]);
 
   return (
     <div>
@@ -71,15 +73,13 @@ export function ItemsView({
           {!hideFilters.includes("tag") && (
             <FilterSelect label="Tag" value={filter.tag} onChange={(v) => set("tag", v)} options={(tags ?? []).map((t) => [t.id, `#${t.name}`])} />
           )}
-          {!hideFilters.includes("status") && (
-            <FilterSelect label="Reading" value={filter.status} onChange={(v) => set("status", v)} options={[["unread", "Unread"], ["reading", "Reading"], ["completed", "Completed"]]} />
-          )}
           {!hideFilters.includes("range") && (
             <FilterSelect label="Added" value={filter.range} onChange={(v) => set("range", v)} options={[["today", "Today"], ["7d", "Last 7 days"], ["30d", "Last 30 days"], ["90d", "Last 90 days"]]} />
           )}
-          <Select value={filter.sort ?? "new"} onValueChange={(v) => set("sort", v === "new" ? ALL : v)}>
+          {!fixed.sort && <Select value={effectiveSort(filter)} onValueChange={(v) => set("sort", v === "custom" ? ALL : v)}>
             <SelectTrigger className="h-9 w-auto shrink-0 gap-1.5 text-sm" aria-label="Sort"><SelectValue /></SelectTrigger>
             <SelectContent>
+              <SelectItem value="custom">My order (drag to arrange)</SelectItem>
               <SelectItem value="new">Newest first</SelectItem>
               <SelectItem value="old">Oldest first</SelectItem>
               <SelectItem value="az">A → Z</SelectItem>
@@ -87,7 +87,7 @@ export function ItemsView({
               <SelectItem value="updated">Recently updated</SelectItem>
               <SelectItem value="popular">Most opened</SelectItem>
             </SelectContent>
-          </Select>
+          </Select>}
           {active.length > 0 && (
             <Button variant="ghost" size="sm" className="h-9 shrink-0" onClick={() => { setQ(""); onChange({}); }}>
               <X /> Clear all
@@ -105,8 +105,11 @@ export function ItemsView({
         <p className="text-sm text-destructive">Couldn't load items: {(error as Error).message}</p>
       ) : data && data.length ? (
         <>
-          <p className="mb-3 font-mono text-xs text-muted-foreground">{data.length} item{data.length === 1 ? "" : "s"}</p>
-          <ItemGrid items={data} view={view} />
+          <p className="mb-3 font-mono text-xs text-muted-foreground">
+            {data.length} item{data.length === 1 ? "" : "s"}
+            {sortable && data.length > 1 && <span className="font-sans normal-case"> · Drag the handle to rearrange</span>}
+          </p>
+          <SortableItemGrid items={data} view={view} filter={merged} sortable={sortable} />
         </>
       ) : (
         <EmptyState

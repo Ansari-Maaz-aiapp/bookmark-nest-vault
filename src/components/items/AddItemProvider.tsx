@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -35,9 +34,8 @@ type Form = {
   kind: string;
   folder_id: string;
   tags: string;
-  readLater: boolean;
 };
-const EMPTY: Form = { url: "", title: "", description: "", content: "", image_url: "", favicon_url: "", site_name: "", author: "", kind: "link", folder_id: "none", tags: "", readLater: false };
+const EMPTY: Form = { url: "", title: "", description: "", content: "", image_url: "", favicon_url: "", site_name: "", author: "", kind: "link", folder_id: "none", tags: "" };
 const AUTO_FIELDS = ["title", "description", "image_url", "favicon_url", "site_name", "author", "kind"] as const;
 
 export function AddItemProvider({ children }: { children: ReactNode }) {
@@ -69,7 +67,6 @@ export function AddItemProvider({ children }: { children: ReactNode }) {
       kind: item.kind,
       folder_id: item.folder_id ?? "none",
       tags: (item.item_tags ?? []).map((t) => t.tags?.name).filter(Boolean).join(", "),
-      readLater: item.reading_status !== "none",
     });
     setNonce((n) => n + 1);
     setOpen(true);
@@ -181,7 +178,6 @@ function ItemForm({
       domain: urlStr ? domainOf(urlStr) : null,
       folder_id: form.folder_id === "none" ? null : form.folder_id,
       published_at: meta?.publishedAt && !Number.isNaN(Date.parse(meta.publishedAt)) ? new Date(meta.publishedAt).toISOString() : editing?.published_at ?? null,
-      reading_status: form.readLater ? (editing && editing.reading_status !== "none" ? editing.reading_status : "unread") : "none",
       duplicate_of: dup && allowCopy ? dup.id : (editing?.duplicate_of ?? null),
     };
     try {
@@ -193,7 +189,7 @@ function ItemForm({
       } else {
         const { data, error } = await supabase
           .from("items")
-          .insert({ ...row, in_inbox: form.folder_id === "none" })
+          .insert(row)
           .select("id")
           .single();
         if (error) throw error;
@@ -325,7 +321,7 @@ function ItemForm({
             <Select value={form.folder_id} onValueChange={(v) => set("folder_id", v)}>
               <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">Inbox (no folder)</SelectItem>
+                <SelectItem value="none">No folder</SelectItem>
                 {folders?.map((f) => <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>)}
               </SelectContent>
             </Select>
@@ -345,17 +341,9 @@ function ItemForm({
 
         <div className="space-y-1.5">
           <Label htmlFor="tags">Tags</Label>
-          <Input id="tags" value={form.tags} onChange={(e) => set("tags", e.target.value)} placeholder="react, auth, reading" className="h-11" />
+          <Input id="tags" value={form.tags} onChange={(e) => set("tags", e.target.value)} placeholder="react, design, ideas" className="h-11" />
           <p className="text-xs text-muted-foreground">Separate with commas.</p>
         </div>
-
-        <label className="flex items-center justify-between rounded-xl border px-3.5 py-3">
-          <span className="text-sm">
-            <span className="font-medium">Add to Reading Queue</span>
-            <span className="block text-xs text-muted-foreground">Keep it in your unread list.</span>
-          </span>
-          <Switch checked={form.readLater} onCheckedChange={(v) => set("readLater", v)} />
-        </label>
 
         {mode === "url" && (meta?.siteName || meta?.author || meta?.publishedAt) && (
           <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-muted-foreground">

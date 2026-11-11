@@ -7,7 +7,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useInvalidateVault } from "@/lib/vault";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { ProfileSection } from "@/components/settings/ProfileSection";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -47,7 +46,7 @@ function Page() {
     const rows = (items ?? []).map((i) => ({
       title: i.title, url: i.url, kind: i.kind, description: i.description, content: i.content,
       folder: (i.folders as { name: string } | null)?.name ?? "", tags: (i.item_tags as { tags: { name: string } | null }[]).map((t) => t.tags?.name).join(", "),
-      favorite: i.is_favorite, pinned: i.is_pinned, reading_status: i.reading_status, saved: i.created_at,
+      favorite: i.is_favorite, pinned: i.is_pinned, saved: i.created_at,
     }));
     const stamp = new Date().toISOString().slice(0, 10);
     if (fmt === "json") download(`linkvault-${stamp}.json`, JSON.stringify(rows, null, 2), "application/json");
@@ -66,9 +65,6 @@ function Page() {
     <>
       <PageHeader title="Settings" icon={Settings} />
       <div className="max-w-2xl space-y-5">
-        <Section title="Profile">
-          <ProfileSection />
-        </Section>
         <Section title="Appearance">
           <div className="grid grid-cols-3 gap-2">
             {([["light", Sun, "Light"], ["dark", Moon, "Dark"], ["system", Monitor, "System"]] as const).map(([m, Icon, l]) => (

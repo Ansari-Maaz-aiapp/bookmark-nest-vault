@@ -9,9 +9,8 @@ export function parseFilter(s: Record<string, unknown>): ItemFilter {
     kind: str(s.kind),
     folder: str(s.folder),
     tag: str(s.tag),
-    status: str(s.status),
     domain: str(s.domain),
     range: range && ["today", "7d", "30d", "90d"].includes(range) ? (range as ItemFilter["range"]) : undefined,
-    sort: sort && ["new", "old", "az", "viewed", "updated", "popular"].includes(sort) ? (sort as ItemFilter["sort"]) : undefined,
+    sort: sort && ["custom", "new", "old", "az", "viewed", "updated", "popular"].includes(sort) ? (sort as ItemFilter["sort"]) : undefined,
   };
 }

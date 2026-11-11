@@ -149,6 +149,7 @@ export type Database = {
           published_at: string | null
           reading_status: string
           site_name: string | null
+          sort_order: number
           title: string
           updated_at: string
           url: string | null
@@ -177,6 +178,7 @@ export type Database = {
           published_at?: string | null
           reading_status?: string
           site_name?: string | null
+          sort_order?: number
           title: string
           updated_at?: string
           url?: string | null
@@ -205,6 +207,7 @@ export type Database = {
           published_at?: string | null
           reading_status?: string
           site_name?: string | null
+          sort_order?: number
           title?: string
           updated_at?: string
           url?: string | null

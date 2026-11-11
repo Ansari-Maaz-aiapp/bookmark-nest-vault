@@ -52,7 +52,7 @@ function subtitle(item: Item) {
   return item.site_name || item.domain;
 }
 
-export function ItemCard({ item, view }: { item: Item; view: ViewMode }) {
+export function ItemCard({ item, view, handle }: { item: Item; view: ViewMode; handle?: React.ReactNode }) {
   const { data: folders } = useFolders();
   const folder = folders?.find((f) => f.id === item.folder_id);
   const detail = { to: "/item/$id" as const, params: { id: item.id } };
@@ -73,6 +73,7 @@ export function ItemCard({ item, view }: { item: Item; view: ViewMode }) {
             </span>
           )}
         </Link>
+        {handle && <div className="absolute left-2 top-2 z-10">{handle}</div>}
         <div className="flex flex-1 flex-col gap-2 p-3.5">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Favicon item={item} className="size-4" />
@@ -100,7 +101,8 @@ export function ItemCard({ item, view }: { item: Item; view: ViewMode }) {
 
   return (
     <SwipeRow item={item}>
-      <div className={cn("flex items-center gap-3 bg-card px-3", view === "compact" ? "py-2" : "py-3")}>
+      <div className={cn("flex items-center gap-3 bg-card px-3", view === "compact" ? "py-2" : "py-3", handle && "pl-1.5")}>
+        {handle}
         {view === "list" ? (
           <Link {...detail} className="relative hidden size-16 shrink-0 overflow-hidden rounded-lg border bg-muted sm:block" tabIndex={-1} aria-hidden>
             <PreviewImage item={item} />

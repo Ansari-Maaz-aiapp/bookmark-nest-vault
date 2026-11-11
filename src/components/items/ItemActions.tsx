@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import {
-  BookOpen, Copy, ExternalLink, Eye, FolderInput, MoreHorizontal, Pencil, Pin, PinOff, Share2, Star, StarOff, Trash2, Inbox, Check,
+  Copy, ExternalLink, Eye, FolderInput, MoreHorizontal, Pencil, Pin, PinOff, Share2, Star, StarOff, Trash2, Check,
 } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent,
@@ -113,19 +113,6 @@ export function ItemActions({ item, trigger }: { item: Item; trigger?: React.Rea
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <BookOpen className="mr-2 size-4" /> Reading status
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            {(["none", "unread", "reading", "completed"] as const).map((s) => (
-              <DropdownMenuItem key={s} onSelect={() => update.mutate({ id: item.id, patch: { reading_status: s }, action: `reading:${s}` })}>
-                {item.reading_status === s ? <Check /> : <span className="size-4" />}
-                {s === "none" ? "Not in queue" : s[0].toUpperCase() + s.slice(1)}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
             <FolderInput className="mr-2 size-4" /> Move to
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="max-h-72 overflow-auto">
@@ -133,17 +120,12 @@ export function ItemActions({ item, trigger }: { item: Item; trigger?: React.Rea
               {!item.folder_id ? <Check /> : <span className="size-4" />} No folder
             </DropdownMenuItem>
             {folders?.map((f) => (
-              <DropdownMenuItem key={f.id} onSelect={() => update.mutate({ id: item.id, patch: { folder_id: f.id, in_inbox: false }, action: "moved" })}>
+              <DropdownMenuItem key={f.id} onSelect={() => update.mutate({ id: item.id, patch: { folder_id: f.id }, action: "moved" })}>
                 {item.folder_id === f.id ? <Check /> : <span className="size-4" />} {f.name}
               </DropdownMenuItem>
             ))}
           </DropdownMenuSubContent>
         </DropdownMenuSub>
-        {item.in_inbox && (
-          <DropdownMenuItem onSelect={() => update.mutate({ id: item.id, patch: { in_inbox: false }, action: "processed" })}>
-            <Inbox /> Mark as processed
-          </DropdownMenuItem>
-        )}
         <DropdownMenuSeparator />
         {item.url && (
           <DropdownMenuItem

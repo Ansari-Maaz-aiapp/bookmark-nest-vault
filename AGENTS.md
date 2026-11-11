@@ -35,3 +35,5 @@ use the editor.
 - Duplicate links are detected by `normalizeUrl` (`src/lib/url.ts`) plus a partial unique index on `items(user_id, normalized_url)`; intentional copies set `duplicate_of`.
 - Strict TS flags (exactOptionalPropertyTypes, noUncheckedIndexedAccess, noPropertyAccessFromIndexSignature, noImplicitReturns) are off to keep UI code readable.
 - Signed-out visitors land on the public `/welcome` marketing page (redirect from `_authenticated`); `/auth` stays the sign-in page. Why: a landing page sells the app before sign-in.
+- Item lists default to the user's custom order (`items.sort_order`, ascending, fractional positions via `src/lib/order.ts`); a drag saves only the moved item's new position. Why: one-row writes keep reordering cheap on large vaults.
+- Profile details live on their own `/profile` page (also a mobile bottom tab); Settings keeps appearance, export and data. Reading queue and inbox were removed; their columns are kept but deprecated.

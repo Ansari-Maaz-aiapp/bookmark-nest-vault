@@ -2,6 +2,7 @@ import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/r
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { toast } from "sonner";
+import { reorder } from "./order";
 
 export type Item = Database["public"]["Tables"]["items"]["Row"] & {
   item_tags?: { tags: { id: string; name: string } | null }[];
@@ -16,12 +17,10 @@ export type ItemFilter = {
   kind?: string;
   folder?: string;
   tag?: string;
-  status?: string;
   fav?: boolean;
   pinned?: boolean;
-  inbox?: boolean;
   range?: "today" | "7d" | "30d" | "90d";
-  sort?: "new" | "old" | "az" | "viewed" | "updated" | "popular";
+  sort?: "custom" | "new" | "old" | "az" | "viewed" | "updated" | "popular";
   trash?: boolean;
   domain?: string;
 };
@@ -47,6 +46,11 @@ function rangeStart(r: ItemFilter["range"]) {
   return d.toISOString();
 }
 
+/** "custom" is the user's own drag-and-drop order; pinned pages default to pin order. */
+export function effectiveSort(f: ItemFilter) {
+  return f.sort ?? (f.pinned ? "pin" : "custom");
+}
+
 export const itemsQuery = (f: ItemFilter) =>
   queryOptions({
     queryKey: keys.items(f),
@@ -55,10 +59,8 @@ export const itemsQuery = (f: ItemFilter) =>
       q = f.trash ? q.not("deleted_at", "is", null) : q.is("deleted_at", null);
       if (f.kind) q = f.kind === "link" ? q.in("kind", ["link", "article"]) : q.eq("kind", f.kind);
       if (f.folder) q = f.folder === "none" ? q.is("folder_id", null) : q.eq("folder_id", f.folder);
-      if (f.status) q = q.eq("reading_status", f.status);
       if (f.fav) q = q.eq("is_favorite", true);
       if (f.pinned) q = q.eq("is_pinned", true);
-      if (f.inbox) q = q.eq("in_inbox", true);
       if (f.domain) q = q.eq("domain", f.domain);
       const start = rangeStart(f.range);
       if (start) q = q.gte("created_at", start);
@@ -70,8 +72,9 @@ export const itemsQuery = (f: ItemFilter) =>
         const { data: links } = await supabase.from("item_tags").select("item_id").eq("tag_id", f.tag);
         q = q.in("id", (links ?? []).map((l) => l.item_id));
       }
-      const sort = f.pinned && !f.sort ? "pin" : (f.sort ?? "new");
-      if (sort === "pin") q = q.order("pin_order").order("created_at", { ascending: false });
+      const sort = effectiveSort(f);
+      if (sort === "custom") q = q.order("sort_order").order("created_at", { ascending: false });
+      else if (sort === "pin") q = q.order("pin_order").order("created_at", { ascending: false });
       else if (sort === "old") q = q.order("created_at", { ascending: true });
       else if (sort === "az") q = q.order("title");
       else if (sort === "viewed") q = q.order("last_viewed_at", { ascending: false, nullsFirst: false });
@@ -131,7 +134,7 @@ export const statsQuery = queryOptions({
   queryFn: async () => {
     const { data, error } = await supabase
       .from("items")
-      .select("id,kind,folder_id,is_favorite,is_pinned,in_inbox,reading_status,created_at,domain")
+      .select("id,kind,folder_id,is_favorite,is_pinned,created_at,domain")
       .is("deleted_at", null)
       .limit(5000);
     if (error) throw error;
@@ -217,6 +220,19 @@ export function useTrashItem() {
           }),
       },
     );
+}
+
+/** Drag-and-drop reorder within the list currently on screen; only the moved item is saved. */
+export function useReorderItems(filter: ItemFilter) {
+  const qc = useQueryClient();
+  return async (list: Item[], from: number, to: number) => {
+    if (from === to) return;
+    const { list: next, position } = reorder(list, from, to);
+    qc.setQueryData(keys.items(filter), next);
+    const { error } = await supabase.from("items").update({ sort_order: position }).eq("id", list[from].id);
+    if (error) toast.error("Couldn't save the new order");
+    qc.invalidateQueries({ queryKey: ["items"] });
+  };
 }
 
 export async function recordView(item: Pick<Item, "id" | "view_count">) {
