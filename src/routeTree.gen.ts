@@ -16,6 +16,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedItemsRouteImport } from './routes/_authenticated/items'
 import { Route as AuthenticatedPinnedRouteImport } from './routes/_authenticated/pinned'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedRecentRouteImport } from './routes/_authenticated/recent'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTagsRouteImport } from './routes/_authenticated/tags'
@@ -56,6 +57,11 @@ const AuthenticatedItemsRoute = AuthenticatedItemsRouteImport.update({
 const AuthenticatedPinnedRoute = AuthenticatedPinnedRouteImport.update({
   id: '/pinned',
   path: '/pinned',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRecentRoute = AuthenticatedRecentRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/items': typeof AuthenticatedItemsRoute
   '/pinned': typeof AuthenticatedPinnedRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/recent': typeof AuthenticatedRecentRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tags': typeof AuthenticatedTagsRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/items': typeof AuthenticatedItemsRoute
   '/pinned': typeof AuthenticatedPinnedRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/recent': typeof AuthenticatedRecentRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tags': typeof AuthenticatedTagsRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/items': typeof AuthenticatedItemsRoute
   '/_authenticated/pinned': typeof AuthenticatedPinnedRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recent': typeof AuthenticatedRecentRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tags': typeof AuthenticatedTagsRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/items'
     | '/pinned'
+    | '/profile'
     | '/recent'
     | '/settings'
     | '/tags'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/items'
     | '/pinned'
+    | '/profile'
     | '/recent'
     | '/settings'
     | '/tags'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/_authenticated/favorites'
     | '/_authenticated/items'
     | '/_authenticated/pinned'
+    | '/_authenticated/profile'
     | '/_authenticated/recent'
     | '/_authenticated/settings'
     | '/_authenticated/tags'
@@ -248,6 +260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPinnedRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/recent': {
       id: '/_authenticated/recent'
       path: '/recent'
@@ -304,6 +323,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedItemsRoute: typeof AuthenticatedItemsRoute
   AuthenticatedPinnedRoute: typeof AuthenticatedPinnedRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRecentRoute: typeof AuthenticatedRecentRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTagsRoute: typeof AuthenticatedTagsRoute
@@ -318,6 +338,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedItemsRoute: AuthenticatedItemsRoute,
   AuthenticatedPinnedRoute: AuthenticatedPinnedRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRecentRoute: AuthenticatedRecentRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTagsRoute: AuthenticatedTagsRoute,
