@@ -57,6 +57,7 @@ export type Database = {
           parent_id: string | null
           pin_order: number
           position: number
+          share_token: string | null
           user_id: string
         }
         Insert: {
@@ -69,6 +70,7 @@ export type Database = {
           parent_id?: string | null
           pin_order?: number
           position?: number
+          share_token?: string | null
           user_id?: string
         }
         Update: {
@@ -81,6 +83,7 @@ export type Database = {
           parent_id?: string | null
           pin_order?: number
           position?: number
+          share_token?: string | null
           user_id?: string
         }
         Relationships: [
@@ -311,7 +314,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_shared_folder: { Args: { _token: string }; Returns: Json }
     }
     Enums: {
       [_ in never]: never
